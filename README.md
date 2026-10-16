@@ -49,7 +49,7 @@ To roll back, restore the previous image line and run the same commands. The vol
 
 ## Status
 
-Early. Tested: macOS, Docker Desktop, Claude Code, two Workspace accounts from different organizations. **Not yet tested:** Codex, Windows, Linux, personal Gmail accounts, the HTTPS profile.
+Early. Tested: macOS, Docker Desktop, Claude Code with two Workspace accounts from different organizations; Codex CLI 0.155.1 (OAuth login through CIMD and a tool call). **Not yet tested:** authorizing a Google account from inside Codex, Windows, Linux, personal Gmail accounts, the HTTPS profile.
 
 ## Without Docker
 

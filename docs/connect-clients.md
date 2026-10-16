@@ -27,7 +27,9 @@ The server advertises client-metadata-document (CIMD) support, so Codex register
 codex mcp login google-multi --oauth-client-registration dcr
 ```
 
-According to the Codex docs, Codex supports Streamable HTTP servers, `http://localhost` URLs and OAuth with DCR/CIMD, and the CLI, desktop app and IDE share one `~/.codex/config.toml`. **Not yet tested end to end by this project.**
+`codex mcp add` already starts the OAuth login and gives up after a few minutes if the browser step is not completed; `codex mcp login google-multi` prints the authorization URL again. Open it in your browser, sign in with one of the `MCP_OWNER_EMAILS` and allow.
+
+Tested with codex-cli 0.155.1 on macOS (default `auto` registration): Codex picked CIMD with `https://chatgpt.com/oauth/codex/client.json`, the login succeeded, and a tool call (`account_list`) worked. With upstream's default allowlist (`claude.ai` only) the server answers `400 invalid_client` ("CIMD rejected: issuer=https://chatgpt.com not allowlisted"), which is why `compose.yaml` adds `chatgpt.com`. Not tested: authorizing a Google account from inside Codex (same flow as Claude Code) and real Gmail/Drive calls. The CLI, desktop app and IDE share one `~/.codex/config.toml`.
 
 ChatGPT *web* is not supported: it needs a public HTTPS URL and plugin packaging.
 
