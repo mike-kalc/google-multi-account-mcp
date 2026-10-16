@@ -1,0 +1,32 @@
+# Optional local HTTPS for Claude Code, only if your Claude client refuses http authorization URLs
+# (reported for the Claude desktop UI; Claude Code CLI and Codex accept http://localhost).
+#
+#   docker compose -f compose.yaml -f compose.https.yaml up -d --wait
+#
+# Then register https://localhost:4244/callback as an extra redirect URI in Google Cloud and see docs/https.md
+# for trusting Caddy's local CA in your client.
+services:
+  mcp:
+    environment:
+      MCP_PUBLIC_URL: https://localhost:4244
+
+  caddy:
+    image: caddy:2-alpine@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f
+    restart: unless-stopped
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE] # the caddy binary has a file capability; without it exec fails
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      mcp:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:4244:4244" # loopback only
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

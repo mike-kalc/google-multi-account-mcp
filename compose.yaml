@@ -1,0 +1,44 @@
+# google-multi-account-mcp: local Docker deployment of mcp-google-multi (MIT, by bakissation).
+# Healthcheck adapted from upstream deploy/compose.yaml (MIT). Image pinned by digest; upgrade recipe in README.
+# Needs Docker Engine >= 28.0.0 (older engines can expose loopback-published ports to the LAN) and Compose >= 2.20.
+name: google-multi-account-mcp
+
+services:
+  mcp:
+    image: ghcr.io/bakissation/mcp-google-multi:6.0.0@sha256:03f2861116537603c487bee9e1679c5335ba0779f8d8581b935642b2615f45ed
+    env_file: .env
+    environment:
+      MCP_HTTP_HOST: 0.0.0.0 # inside the container; the host side is published on loopback only (below)
+      MCP_PUBLIC_URL: ${MCP_PUBLIC_URL:-http://localhost:4243}
+      # Codex registers through a client-metadata document hosted on chatgpt.com; upstream only trusts claude.ai by default
+      MCP_CIMD_ALLOWED_ISSUERS: ${MCP_CIMD_ALLOWED_ISSUERS:-claude.ai,chatgpt.com}
+      GOOGLE_PROFILE: ${GOOGLE_PROFILE:-read-only} # read-only | safe-writes | full-writes
+      GOOGLE_TOOLSETS: ${GOOGLE_TOOLSETS:-gmail,drive,sheets,docs,calendar}
+      # drive_upload can read any file inside the container, including the token store (no path guard upstream)
+      GOOGLE_WRITE_DENY: ${GOOGLE_WRITE_DENY:-drive:upload}
+    init: true # distroless has no init; SIGTERM must reach node
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "127.0.0.1:4243:4243" # loopback only
+    volumes:
+      # Google tokens + master.key live in /home/nonroot/.config/mcp-google-multi.
+      # Losing this volume = re-authorize every account. (Mounting the home dir lets Docker copy its uid 65532 ownership.)
+      - mcp-config:/home/nonroot
+    healthcheck:
+      test:
+        - CMD
+        - /nodejs/bin/node
+        - -e
+        - "const h=process.env.MCP_HTTP_HOST||'127.0.0.1';fetch('http://'+h+':4243/.well-known/oauth-protected-resource').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  mcp-config:

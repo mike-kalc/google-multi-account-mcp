@@ -1,0 +1,11 @@
+{
+	admin off
+	auto_https disable_redirects
+	skip_install_trust
+}
+
+https://localhost:4244 {
+	tls internal
+	# The original Host (localhost:4244) passes through; the server checks it against MCP_PUBLIC_URL.
+	reverse_proxy mcp:4243
+}
