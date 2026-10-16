@@ -2,3 +2,4 @@
 .env.*
 !.env.example
 caddy-root.crt
+__pycache__/

@@ -29,7 +29,7 @@ https://console.cloud.google.com/flows/enableapi?apiid=gmail.googleapis.com,driv
 
 https://console.cloud.google.com/auth/overview/create?project=PROJECT_ID
 
-1. App name (anything), support email (yours).
+1. App name and support email (yours). The app name is what Google shows on the consent screen and in each account's list of third-party access, so make it say what it is, for example `Google multi-account MCP (local)`. Google lists one entry per OAuth client, never per AI tool, so it cannot show whether Claude Code or Codex used it.
 2. Audience: **Internal** or **External** (step 0).
 3. Contact email, accept the *Google API Services User Data Policy*, **Create**.
 

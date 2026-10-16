@@ -1,6 +1,6 @@
-# Optional local HTTPS (Claude Code only)
+# Optional local HTTPS for OAuth mode (Claude Code only)
 
-Only needed if your Claude client refuses `http://` authorization URLs (reported for the Claude desktop UI). Claude Code CLI and Codex accept `http://localhost`, and Codex ignores `NODE_EXTRA_CA_CERTS`, so this profile is not for Codex.
+**Not needed in the default token mode.** It is only for using the server's own OAuth sign-in from Claude Code: Claude Code refuses to open a sign-in URL that is not https (`Refused to open sign-in URL ...: must be https`, seen in the desktop app and in the CLI). Codex accepts `http://localhost` and ignores `NODE_EXTRA_CA_CERTS`, so this profile is not for Codex.
 
 1. Add `https://localhost:4244/callback` to the client's redirect URIs in Google Cloud.
 2. Start with the override file:

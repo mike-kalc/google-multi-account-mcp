@@ -8,3 +8,27 @@ jobs:
       - run: cp .env.example .env
       - run: docker compose config -q
       - run: docker compose -f compose.yaml -f compose.https.yaml config -q
+
+  # Token mode relies on upstream's token format: start the pinned image with dummy credentials,
+  # mint a token locally and make sure the server accepts it.
+  token-mode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start the server with dummy credentials
+        run: |
+          cp .env.example .env
+          python3 - <<'PY'
+          import sys
+          sys.path.insert(0, "scripts")
+          import kit
+          kit.write_env({"GOOGLE_CLIENT_ID": "ci-id", "GOOGLE_CLIENT_SECRET": "ci-secret",
+                         "GOOGLE_ACCOUNTS": "ci:ci@example.com", "MCP_OWNER_EMAILS": "ci@example.com",
+                         "MCP_JWT_KEY": kit.new_jwt_key()})
+          PY
+          docker compose up -d --wait --wait-timeout 120
+      - run: python3 scripts/mint-token.py --check
+      - if: always()
+        run: |
+          docker compose logs mcp
+          docker compose down -v

@@ -1,5 +1,5 @@
-# Optional local HTTPS for Claude Code, only if your Claude client refuses http authorization URLs
-# (reported for the Claude desktop UI; Claude Code CLI and Codex accept http://localhost).
+# Optional local HTTPS, only for using the server's OAuth sign-in from Claude Code (token mode, the default,
+# does not need it). Claude Code refuses sign-in URLs that are not https; Codex accepts http://localhost.
 #
 #   docker compose -f compose.yaml -f compose.https.yaml up -d --wait
 #

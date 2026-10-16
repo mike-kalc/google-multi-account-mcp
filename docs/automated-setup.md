@@ -24,9 +24,10 @@ Rules:
     <clipboard command> | python3 scripts/set-env.py GOOGLE_CLIENT_ID '[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com'
   Clear the clipboard afterwards.
 - Do not close the "client created" dialog before both values are saved: the secret is shown once.
-- Put the accounts in GOOGLE_ACCOUNTS and their emails in MCP_OWNER_EMAILS in .env (these are not secrets).
-- Finish by running `docker compose up -d --wait`, then report what you changed and whether publishing
-  to "In production" is still outstanding (External apps only).
+- When both values are saved, have me run `python3 scripts/setup.py` in a terminal I can type into. It asks for
+  the client ID and secret again (Enter keeps what is saved) and for my first Google account (alias + email),
+  starts Docker and guides the authorization of each account. Do not edit the other .env values yourself.
+- Report what you changed and whether publishing to "In production" is still outstanding (External apps only).
 ```
 
 ## Tips that save time
