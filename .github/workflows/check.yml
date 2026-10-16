@@ -1,0 +1,10 @@
+name: check
+on: [push, pull_request]
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp .env.example .env
+      - run: docker compose config -q
+      - run: docker compose -f compose.yaml -f compose.https.yaml config -q
