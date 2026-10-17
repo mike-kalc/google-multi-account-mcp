@@ -60,7 +60,7 @@ To roll back, restore the previous image line and run the same commands. The vol
 
 ## Status
 
-Early. Tested on macOS with Docker Desktop: Claude Code CLI connecting with the local token (`claude mcp get` shows Connected), Codex CLI 0.155.1 with the token (a tool call) and with OAuth (login through CIMD), two Workspace accounts from different organizations authorized, the setup script on a fresh simulated install and on an existing one, and the Claude desktop app's MCP servers dialog listing the server as Connected with its tools and no sign-in. **Not yet tested:** a tool call from the desktop app, Windows, Linux, personal Gmail accounts, the HTTPS profile.
+Early. Tested on macOS with Docker Desktop: Claude Code CLI connecting with the local token (`claude mcp get` shows Connected), Codex CLI 0.155.1 with the token (a tool call) and with OAuth (login through CIMD), two Workspace accounts from different organizations authorized, the setup script from scratch (a real run, then reset and repeated) and on a fresh simulated install, read-only tool calls from the Claude desktop app, and a personal Gmail account added with `add-account` and reached through the server. **Not yet tested:** Windows, Linux, the HTTPS profile, authorizing a Google account from inside Codex.
 
 ## Without Docker
 
